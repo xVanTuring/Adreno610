@@ -10,14 +10,18 @@
 #include <vector>
 using IOReturn=int;
 using IOOptionBits=unsigned;
+using IODirection=IOOptionBits;
 using IOByteCount=size_t;
 using addr64_t=uint64_t;
 constexpr IOReturn kIOReturnSuccess=0,kIOReturnBadArgument=1,kIOReturnBusy=2,
  kIOReturnNoResources=3,kIOReturnNoMemory=4,kIOReturnUnsupported=5,
  kIOReturnNotReady=6,kIOReturnIOError=7,kIOReturnTimeout=8;
-constexpr unsigned kIODirectionOut=2,kIODirectionInOut=3,kIOMemoryMapperNone=0x800,kIOMemoryPhysicallyContiguous=0x10;
+constexpr unsigned kIODirectionOut=2,kIODirectionInOut=3,kIOMemoryMapperNone=0x800,kIOMemoryPhysicallyContiguous=0x10,
+ kIOMemoryPersistent=0x10000;
 inline void *kernel_task=reinterpret_cast<void *>(1);
 using task_t=void *;
+/* The calling process for the import records (NativeAdrenoUserClient::importBo). Weak: every source of a test includes this header. */
+extern "C" __attribute__((weak)) int proc_selfpid(void) {return 1;}
 /* ScatterUnlessContiguous: what the tablet does, one physical page per span unless the caller asked for contiguous memory. */
 enum SegmentMode {Contiguous,Scattered,ZeroPhysical,UnalignedPhysical,ShortSegment,HighPhysical,Paired,ScatterUnlessContiguous};
 class IOBufferMemoryDescriptor;
